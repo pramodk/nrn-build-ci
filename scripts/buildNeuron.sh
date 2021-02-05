@@ -9,10 +9,11 @@ source "${SCRIPT_DIR}/environment.sh"
 export PYTHON=$(command -v python3)
 
 # Install extra dependencies for NEURON
+# Make sure we have a modern pip, old ones may not handle dependency versions
+# correctly
+${PYTHON} -m pip install --user --upgrade pip
 ${PYTHON} -m pip install --user --upgrade bokeh cython ipython matplotlib \
   mpi4py pytest scikit-build
-# Install extra dependencies for building the NEURON documentation
-${PYTHON} -m pip install --user --upgrade -r docs/docs_requirements.txt
 
 # Set default compilers, but don't override preset values
 export CC=${CC:-gcc}
@@ -44,10 +45,4 @@ echo "------- Install NEURON -------"
 make install
 
 echo "------- Run test suite -------"
-# Make sure the installed files can be found when executing the tests
-export PATH=${INSTALL_DIR}/bin:${PATH}
-export PYTHONPATH=${INSTALL_DIR}/lib/python:${PYTHONPATH}
 ctest -VV
-
-echo "------- Build Doxygen Documentation -------"
-make docs # We're still in the build/ directory here
