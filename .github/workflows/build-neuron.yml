@@ -70,10 +70,8 @@ jobs:
         - { vm: ubuntu-latest, container: "centos:7", flavour: redhat }
         # CentOS8 Docker image
         - { vm: ubuntu-latest, container: "centos:8", flavour: redhat }
-        # Fedora 33 Docker image
-        - { vm: ubuntu-latest, container: "fedora:33", flavour: redhat }
-        # Fedora Latest (34, at time of writing) Docker image
-        - { vm: ubuntu-latest, container: "fedora:latest", flavour: redhat }
+        # Fedora 34 Docker image
+        - { vm: ubuntu-latest, container: "fedora:34", flavour: redhat }
         # Ubuntu 18.04 Docker image
         - { vm: ubuntu-latest, container: "ubuntu:18.04", flavour: debian }
         # Ubuntu Latest (20.04, at time of writing) Docker image
@@ -83,6 +81,13 @@ jobs:
         # Debian Bullseye (11) Docker image
         - { vm: ubuntu-latest, container: "debian:stable", flavour: debian }
         branch_or_tag: ${{ fromJson(needs.provide_version_matrix.outputs.matrix) }}
+        # Avoid the fedora:latest + 8.0.0 combination, we should re-enable this
+        # later. See https://github.com/neuronsimulator/nrn-build-ci/issues/28
+        # for more information.
+        include:
+          # Fedora Latest (35, at time of writing) Docker image
+          - os: { vm: ubuntu-latest, container: "fedora:latest", flavour: redhat }
+            branch_or_tag: ""
       fail-fast: false
       
     steps:
