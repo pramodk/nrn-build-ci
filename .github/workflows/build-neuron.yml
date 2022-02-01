@@ -68,8 +68,8 @@ jobs:
         - { vm: macos-10.15, flavour: macOS }
         # CentOS7 Docker image
         - { vm: ubuntu-latest, container: "centos:7", flavour: redhat }
-        # CentOS8 Docker image
-        - { vm: ubuntu-latest, container: "centos:8", flavour: redhat }
+        # CentOS Stream 8 Docker image
+        - { vm: ubuntu-latest, container: "quay.io/centos/centos:stream8", flavour: redhat }
         # Fedora 34 Docker image
         - { vm: ubuntu-latest, container: "fedora:34", flavour: redhat }
         # Ubuntu 18.04 Docker image
@@ -101,6 +101,8 @@ jobs:
       # and breaks the build.
       - name: Install ${{matrix.os.flavour}} packages
         run: |
+          CONTAINER_URL="${{matrix.os.container}}"
+          CONTAINER_SCRIPT="scripts/install_${{matrix.os.flavour}}_${CONTAINER_URL##*/}.sh"
           # (container+flavour)-specific script runs first because it must be
           # able to enable repositories that make the flavour-specific script
           # work.
@@ -108,7 +110,6 @@ jobs:
           if [ -f "${FLAVOUR_SCRIPT}" ]; then source "${FLAVOUR_SCRIPT}"; fi
         env:
           FLAVOUR_SCRIPT: scripts/install_${{matrix.os.flavour}}.sh
-          CONTAINER_SCRIPT: scripts/install_${{matrix.os.flavour}}_${{matrix.os.container}}.sh
 
       # Checkout the repository; do this before the privilege step so that we
       # can chown the result there
