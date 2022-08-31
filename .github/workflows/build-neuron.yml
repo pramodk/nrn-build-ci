@@ -62,9 +62,9 @@ jobs:
       matrix:
         os:
         # GitHub Actions MacOS 12 runner
-        - { vm: macos-12, flavour: macOS }
+        #- { vm: macos-12, flavour: macOS }
         # GitHub Actions MacOS 11 runner
-        - { vm: macos-11, flavour: macOS }
+        #- { vm: macos-11, flavour: macOS }
         # CentOS7 Docker image
         - { vm: ubuntu-latest, container: "centos:7", flavour: redhat }
         # CentOS Stream 8 Docker image
@@ -74,15 +74,15 @@ jobs:
         # Fedora 35 Docker image
         - { vm: ubuntu-latest, container: "fedora:35", flavour: redhat }
         # Fedora Latest (36, at time of writing) Docker image
-        - { vm: ubuntu-latest, container: "fedora:latest", flavour: redhat }
+        #- { vm: ubuntu-latest, container: "fedora:latest", flavour: redhat }
         # Ubuntu 20.04 Docker image
-        - { vm: ubuntu-latest, container: "ubuntu:20.04", flavour: debian }
+        #- { vm: ubuntu-latest, container: "ubuntu:20.04", flavour: debian }
         # Ubuntu Latest (22.04, at time of writing) Docker image
-        - { vm: ubuntu-latest, container: "ubuntu:latest", flavour: debian }
+        #- { vm: ubuntu-latest, container: "ubuntu:latest", flavour: debian }
         # Debian Buster (10) Docker image
-        - { vm: ubuntu-latest, container: "debian:buster", flavour: debian }
+        #- { vm: ubuntu-latest, container: "debian:buster", flavour: debian }
         # Debian Bullseye (11) Docker image
-        - { vm: ubuntu-latest, container: "debian:stable", flavour: debian }
+        #- { vm: ubuntu-latest, container: "debian:stable", flavour: debian }
         branch_or_tag: ${{ fromJson(needs.provide_version_matrix.outputs.matrix) }}
       fail-fast: false
       
@@ -119,7 +119,8 @@ jobs:
         working-directory: ${{github.workspace}}
         run: |
           if [ -n "${{matrix.branch_or_tag}}" ]; then BRANCH_OPT="--branch=${{matrix.branch_or_tag}}"; fi
-          git clone --depth=1 --single-branch ${BRANCH_OPT} ${{github.server_url}}/${{github.repository_owner}}/nrn
+          #git clone --depth=1 --single-branch ${BRANCH_OPT} ${{github.server_url}}/${{github.repository_owner}}/nrn
+          git clone --depth=1 --single-branch --branch=pramodk/centos7-mpich ${{github.server_url}}/${{github.repository_owner}}/nrn
           # Init submodules for testing purposes
           cd nrn && git submodule update --init
 
